@@ -4,6 +4,7 @@
             <span contenteditable="true" @blur="saveTitle">{{title}}</span>
             <input type="checkbox" :checked="done"  />
             <span class="checkmark" @click="toggle"></span>
+            <a href="#" @click="removeItem" class="close"></a>
         </label>
     </div>
 </template>
@@ -15,7 +16,8 @@ export default {
     title: String,
     done: Boolean,
     toggle: Function,
-    saveTitle: Function
+    saveTitle: Function,
+    removeItem: Function
   }
 }
 </script>
@@ -83,4 +85,28 @@ export default {
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
 }
+.close {
+  width: 16px;
+  height: 16px;
+  opacity: 0.3;
+}
+.close:hover {
+  opacity: 1;
+}
+.close:before, .close:after {
+  position: absolute;
+  right: -20px;
+  top: 10px;
+  content: ' ';
+  height: 16px;
+  width: 2px;
+  background-color: #333;
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
+}
+
 </style>

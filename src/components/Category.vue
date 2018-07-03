@@ -2,7 +2,7 @@
     <div class="category">
         <p :contenteditable="title !== 'Uncategorised'" @blur="saveTitle">{{title}}</p>
         <small v-if="filteredItems.length === 0">No Items</small>
-        <TodoItem v-for="item in filteredItems" v-bind:key="item.id" :done="item.done" :title="item.title" :toggle="markAs.bind(null, item)" :saveTitle="editItem.bind(null, item)"/>
+        <TodoItem v-for="item in filteredItems" v-bind:key="item.id" :done="item.done" :removeItem="removeItem.bind(null, item)" :title="item.title" :toggle="markAs.bind(null, item)" :saveTitle="editItem.bind(null, item)"/>
     </div>
 </template>
 
@@ -23,6 +23,11 @@ export default {
           filteredItems: this.items.filter((item) => item.title !== "")
       }
   },
+  watch: {
+      items: function(val){
+          this.filteredItems = this.items.filter((item) => item.title !== "");
+      }
+  },
   methods: {
     markAs: function(item){
       this.$store.commit('markDone', item);
@@ -34,6 +39,9 @@ export default {
     saveTitle: function(event){
         this.items.map((item) => item.category = event.target.innerText).forEach((item) => 
         this.$store.commit('updateItem', item))
+    },
+    removeItem: function(item){
+        this.$store.commit('removeItem',item)
     }
   }
 }

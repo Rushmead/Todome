@@ -13,6 +13,7 @@
 
 <script>
 import Category from './components/Category.vue'
+import { mapState } from 'vuex';
 
 export default {
   name: 'app',
@@ -24,16 +25,24 @@ export default {
   components: {
     Category
   },
-  computed: {
-    items() {
-      return this.$store.state.items
-    },
-    categories(){
-      return this.$store.state.items.filter((item) => item.category !== undefined).map((item) => item.category).filter((category, index, self) => self.indexOf(category)== index)
+  watch: {
+    items: function(val){
+      this.$forceUpdate();
+      this.categories = val.filter((item) => item.category !== undefined).map((item) => item.category).filter((category, index, self) => self.indexOf(category)== index)
+    }
+  },
+  computed: {...mapState(['items']),
+    categories: {
+      get: function(){
+        return this.items.filter((item) => item.category !== undefined).map((item) => item.category).filter((category, index, self) => self.indexOf(category)== index)
+      },
+      set: function(newVal){
+        
+      }
     }
   },
   methods: {
-    newItem: function(event){
+    newItem: function(){
       if(this.newItemText.trim() === ""){
         return;
       }
@@ -52,10 +61,10 @@ export default {
       this.$store.commit('clear');
     },
     itemsInCategory: function(title){
-      return this.$store.state.items.filter((item) => item.category !== undefined && item.category === title);
+      return this.items.filter((item) => item.category !== undefined && item.category === title);
     },
     itemsWithoutCategory: function(){
-      return this.$store.state.items.filter((item) => item.category === undefined)
+      return this.items.filter((item) => item.category === undefined)
     }
   }
 }
