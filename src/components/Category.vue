@@ -1,6 +1,7 @@
 <template>
     <div class="category">
-        <p :contenteditable="title !== 'Uncategorised'" @blur="saveTitle">{{title}}</p>
+        <p @blur="saveTitle"><span :contenteditable="title !== 'Uncategorised'"> {{title}}</span> 
+        <small v-if="title !== 'Uncategorised'" class="link" @click="deleteCategory">- Delete</small></p>
         <small v-if="filteredItems.length === 0">No Items</small>
         <TodoItem v-for="item in filteredItems" v-bind:key="item.id" :done="item.done" :removeItem="removeItem.bind(null, item)" :title="item.title" :toggle="markAs.bind(null, item)" :saveTitle="editItem.bind(null, item)"/>
     </div>
@@ -16,7 +17,8 @@ export default {
   props: {
       title: String,
       items: Array,
-        toggle: Function
+        toggle: Function,
+        deleteCategory: Function
   },
   data: function(){
       return {
@@ -54,7 +56,19 @@ export default {
     flex-direction: column;
 }
 .category > p {
+    & > span {
     text-transform: capitalize;
     text-decoration: underline;
+    }
+    & > .link {
+    text-decoration: none !important;
+    }
+}
+.link {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 1);
+    &:hover {
+        color: rgba(0, 0, 0, 0.7);
+    }
 }
 </style>
